@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -21,6 +22,7 @@ import java.util.Objects;
 public class PharmacyRedisTemplateService {
 
     private static final String CACHE_KEY = "PHARMACY";
+    private static final long CACHE_TTL_HOURS = 24;
 
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
@@ -42,6 +44,8 @@ public class PharmacyRedisTemplateService {
             hashOperations.put(CACHE_KEY,
                     pharmacyDto.getId().toString(),
                     serializePharmacyDto(pharmacyDto));
+            // 캐시 TTL 설정 (24시간)
+            redisTemplate.expire(CACHE_KEY, CACHE_TTL_HOURS, TimeUnit.HOURS);
             log.info("[PharmacyRedisTemplateService save success] id: {}", pharmacyDto.getId());
         } catch (Exception e) {
             log.error("[PharmacyRedisTemplateService save error] {}", e.getMessage());
@@ -56,7 +60,7 @@ public class PharmacyRedisTemplateService {
                 PharmacyDto pharmacyDto = deserializePharmacyDto(value);
                 list.add(pharmacyDto);
             }
-            log.info("[PharmacyRedisTemplateService findAll success] list: {}", list.toString());
+            log.info("[PharmacyRedisTemplateService findAll] size: {}", list.size());
             return list;
 
         } catch (Exception e) {

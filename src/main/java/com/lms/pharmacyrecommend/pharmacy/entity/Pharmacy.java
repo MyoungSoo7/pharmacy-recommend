@@ -1,10 +1,7 @@
 package com.lms.pharmacyrecommend.pharmacy.entity;
 
 import com.lms.pharmacyrecommend.BaseTimeEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +13,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(indexes = {
+        @Index(name = "idx_pharmacy_coords", columnList = "latitude, longitude"),
+        @Index(name = "idx_pharmacy_name", columnList = "pharmacyName")
+})
 public class Pharmacy extends BaseTimeEntity {
 
     @Id
