@@ -21,24 +21,18 @@ public class PharmacyController {
     private final PharmacyRepositoryService pharmacyRepositoryService;
     private final PharmacyRedisTemplateService pharmacyRedisTemplateService;
 
-    // 데이터 초기 셋팅을 위한 임시 메소드
     @GetMapping("/csv/save")
     public String saveCsv() {
-        //saveCsvToDatabase();
         saveCsvToRedis();
-
         return "success save";
     }
 
     public void saveCsvToDatabase() {
-
         List<Pharmacy> pharmacyList = loadPharmacyList();
         pharmacyRepositoryService.saveAll(pharmacyList);
-
     }
 
     public void saveCsvToRedis() {
-
         List<PharmacyDto> pharmacyDtoList = pharmacyRepositoryService.findAll()
                 .stream().map(pharmacy -> PharmacyDto.builder()
                         .id(pharmacy.getId())
@@ -49,8 +43,9 @@ public class PharmacyController {
                         .build())
                 .collect(Collectors.toList());
 
+        log.info("[PharmacyController] saving {} pharmacies to Redis", pharmacyDtoList.size());
         pharmacyDtoList.forEach(pharmacyRedisTemplateService::save);
-
+        log.info("[PharmacyController] Redis save complete");
     }
 
     private List<Pharmacy> loadPharmacyList() {

@@ -55,10 +55,11 @@ public class DirectionService {
 
     public List<Direction> buildDirectionList(DocumentDto documentDto) {
         if(Objects.isNull(documentDto)) return Collections.emptyList();
-        log.info("documentDto>>>>>>"+documentDto.getAddressName());
 
-        log.info("pharmacySearchService.searchPharmacyDtoList()>>>>>>"+pharmacySearchService.searchPharmacyDtoList().size());
-        return pharmacySearchService.searchPharmacyDtoList()
+        var pharmacyDtoList = pharmacySearchService.searchPharmacyDtoList();
+        log.info("[DirectionService] address: {}, pharmacies: {}", documentDto.getAddressName(), pharmacyDtoList.size());
+
+        return pharmacyDtoList
                 .stream().map(pharmacyDto ->
                         Direction.builder()
                                 .inputAddress(documentDto.getAddressName())

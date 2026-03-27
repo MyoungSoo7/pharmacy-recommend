@@ -21,16 +21,25 @@ public class PharmacySearchService {
 
     public List<PharmacyDto> searchPharmacyDtoList() {
 
-        // redis
+        // redis cache-first
         List<PharmacyDto> pharmacyDtoList = pharmacyRedisTemplateService.findAll();
-        log.info("[PharmacySearchService.searchPharmacyDtoList] pharmacyDtoList: {}", pharmacyDtoList);
-        if(CollectionUtils.isNotEmpty(pharmacyDtoList)) return pharmacyDtoList;
+        if(CollectionUtils.isNotEmpty(pharmacyDtoList)) {
+            log.info("[PharmacySearchService] cache hit, size: {}", pharmacyDtoList.size());
+            return pharmacyDtoList;
+        }
 
-        // db
-        return pharmacyRepositoryService.findAll()
+        // cache miss → DB fallback + auto-reload cache
+        log.info("[PharmacySearchService] cache miss, loading from DB and reloading cache");
+        List<PharmacyDto> dbList = pharmacyRepositoryService.findAll()
                 .stream()
                 .map(this::convertToPharmacyDto)
                 .collect(Collectors.toList());
+
+        // DB 데이터를 Redis에 자동 적재 (다음 요청부터 캐시 히트)
+        dbList.forEach(pharmacyRedisTemplateService::save);
+        log.info("[PharmacySearchService] cache reloaded, size: {}", dbList.size());
+
+        return dbList;
     }
 
     private PharmacyDto convertToPharmacyDto(Pharmacy pharmacy) {
