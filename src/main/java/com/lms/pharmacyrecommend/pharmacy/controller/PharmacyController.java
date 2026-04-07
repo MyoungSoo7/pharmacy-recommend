@@ -5,6 +5,10 @@ import com.lms.pharmacyrecommend.pharmacy.dto.PharmacyDto;
 import com.lms.pharmacyrecommend.pharmacy.entity.Pharmacy;
 import com.lms.pharmacyrecommend.pharmacy.service.PharmacyRepositoryService;
 import com.lms.pharmacyrecommend.util.CsvUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +20,19 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Pharmacy", description = "약국 데이터 적재 / 캐시 관리 API")
 public class PharmacyController {
 
     private final PharmacyRepositoryService pharmacyRepositoryService;
     private final PharmacyRedisTemplateService pharmacyRedisTemplateService;
 
+    @Operation(
+            summary = "DB 약국 데이터를 Redis 캐시에 저장",
+            description = "DB에 저장된 모든 약국 데이터를 조회하여 Redis 해시 캐시(PHARMACY)에 적재한다."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공 시 'success save' 문자열 반환")
+    })
     @GetMapping("/csv/save")
     public String saveCsv() {
         saveCsvToRedis();

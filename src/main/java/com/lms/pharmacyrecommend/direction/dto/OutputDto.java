@@ -1,16 +1,26 @@
 package com.lms.pharmacyrecommend.direction.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @Builder
+@Schema(description = "약국 추천 결과 DTO")
 public class OutputDto {
 
-    private String pharmacyName;    // 약국 명
-    private String pharmacyAddress; // 약국 주소
-    private String directionUrl;    // 길안내 url
-    private String roadViewUrl;     // 로드뷰 url
-    private String distance;        // 고객 주소와 약국 주소의 거리
+    @Schema(description = "약국 명", example = "강남365약국")
+    private String pharmacyName;
+
+    @Schema(description = "약국 주소", example = "서울 강남구 역삼동 123-45")
+    private String pharmacyAddress;
+
+    @Schema(description = "단축 길안내 URL", example = "http://lmshi.shop:8081/dir/abc123")
+    private String directionUrl;
+
+    @Schema(description = "카카오맵 로드뷰 URL", example = "https://map.kakao.com/link/roadview/37.5,127.0")
+    private String roadViewUrl;
+
+    @Schema(description = "사용자 주소와 약국 주소 사이 거리", example = "1.23 km")
+    private String distance;
 }
