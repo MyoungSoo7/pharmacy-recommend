@@ -47,7 +47,7 @@ public class DirectionService {
 
         String params = String.join(",", direction.getTargetPharmacyName(),
                 String.valueOf(direction.getTargetLatitude()), String.valueOf(direction.getTargetLongitude()));
-        String result = UriComponentsBuilder.fromHttpUrl(DIRECTION_BASE_URL + params)
+        String result = UriComponentsBuilder.fromUriString(DIRECTION_BASE_URL + params)
                 .toUriString();
 
         return result;
