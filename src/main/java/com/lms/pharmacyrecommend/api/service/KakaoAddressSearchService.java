@@ -42,7 +42,7 @@ public class KakaoAddressSearchService {
     private record CachedResponse(KakaoApiResponseDto response, long cachedAt) {}
 
     @Retryable(
-            exceptionExpression = "RuntimeException.class",
+            retryFor = RuntimeException.class,
             maxAttempts = 2,
             backoff = @Backoff(delay = 2000)
     )
@@ -89,7 +89,7 @@ public class KakaoAddressSearchService {
 
     @Recover
     public KakaoApiResponseDto recover(RuntimeException e, String address) {
-        log.error("All the retries failed. address: {}, error : {}", address, e.getMessage());
+        log.error("All the retries failed. address: {}, error : {}", address, e.getMessage(), e);
         return null;
     }
 

@@ -16,11 +16,11 @@ public class DocumentDto {
     private String addressName;
 
     @JsonProperty("y")
-    private double latitude;
+    private Double latitude;
 
     @JsonProperty("x")
-    private double longitude;
+    private Double longitude;
 
     @JsonProperty("distance")
-    private double distance;
+    private Double distance;
 }

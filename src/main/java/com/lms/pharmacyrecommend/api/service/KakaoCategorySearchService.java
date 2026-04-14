@@ -30,7 +30,7 @@ public class KakaoCategorySearchService {
     private String kakaoRestApiKey;
 
     @Retryable(
-            exceptionExpression = "RuntimeException.class",
+            retryFor = RuntimeException.class,
             maxAttempts = 2,
             backoff = @Backoff(delay = 2000)
     )

@@ -15,7 +15,7 @@ public class OutputDto {
     @Schema(description = "약국 주소", example = "서울 강남구 역삼동 123-45")
     private String pharmacyAddress;
 
-    @Schema(description = "단축 길안내 URL", example = "http://lmshi.shop:8081/dir/abc123")
+    @Schema(description = "단축 길안내 URL", example = "https://pharmacy.lemuel.co.kr/dir/abc123")
     private String directionUrl;
 
     @Schema(description = "카카오맵 로드뷰 URL", example = "https://map.kakao.com/link/roadview/37.5,127.0")

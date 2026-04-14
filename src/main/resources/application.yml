@@ -64,7 +64,7 @@ server:
 pharmacy:
   recommendation:
     base:
-      url: http://lmshi.shop:8081/dir/
+      url: http://localhost:8081/dir/
 
 ---
 spring:
@@ -98,4 +98,4 @@ spring:
 pharmacy:
   recommendation:
     base:
-      url: http://lmshi.shop:8081/dir/
+      url: https://pharmacy.lemuel.co.kr/dir/
