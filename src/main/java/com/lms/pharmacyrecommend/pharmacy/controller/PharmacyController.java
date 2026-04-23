@@ -55,8 +55,13 @@ public class PharmacyController {
                         .build())
                 .collect(Collectors.toList());
 
-        log.info("[PharmacyController] saving {} pharmacies to Redis", pharmacyDtoList.size());
-        pharmacyDtoList.forEach(pharmacyRedisTemplateService::save);
+        log.info("[PharmacyController] saving {} pharmacies to Redis (batch)", pharmacyDtoList.size());
+        int batchSize = 500;
+        for (int i = 0; i < pharmacyDtoList.size(); i += batchSize) {
+            List<PharmacyDto> batch = pharmacyDtoList.subList(i, Math.min(i + batchSize, pharmacyDtoList.size()));
+            batch.forEach(pharmacyRedisTemplateService::save);
+            log.info("[PharmacyController] batch {}/{} saved", Math.min(i + batchSize, pharmacyDtoList.size()), pharmacyDtoList.size());
+        }
         log.info("[PharmacyController] Redis save complete");
     }
 
